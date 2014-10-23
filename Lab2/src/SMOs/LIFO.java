@@ -3,7 +3,7 @@ package SMOs;
 
 import java.util.LinkedList;
 
- class LIFO extends SMO {
+ public class LIFO extends SMO {
 
     private String p = "text";
     void main(LIFO l){
