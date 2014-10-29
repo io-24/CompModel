@@ -10,11 +10,12 @@ import java.util.Collection;
 public interface Device {
 
     Device putTask();
-    boolean isEmty();
+    boolean deviceReady();
     Device addDevice(Device device, double d);
-    Device processingTask();
+    Device processingTask(int number_processor);
     int getNumberofResolvedTasks();
     String getDeviseName();
-    double getEfficiency();
+    double getEfficiency(int number_processor);
+    void makeTree();
 
 }

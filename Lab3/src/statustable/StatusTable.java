@@ -30,8 +30,8 @@ public class StatusTable {
         return  statusTable;
     }
 
-    public boolean addStatus(Device device, double next) {
-        problems.add(new Problem(device, current_time + next));
+    public boolean addStatus(Device device, double next, int number_processor) {
+        problems.add(new Problem(device, current_time + next, number_processor));
         return true;
     }
 
@@ -46,17 +46,19 @@ public class StatusTable {
         }
         problems.remove(problem);
         current_time = problem.arrival_time;
-        problem.device.processingTask();
+        problem.device.processingTask(problem.number_processor);
 
     }
 
     private class Problem{
         final Device device;
         final double arrival_time;
+        final int number_processor;
 
-        public Problem(Device device, double arrival_time) {
+        public Problem(Device device, double arrival_time, int number_processor) {
             this.arrival_time = arrival_time;
             this.device = device;
+            this.number_processor = number_processor;
         }
 
        /* @Override

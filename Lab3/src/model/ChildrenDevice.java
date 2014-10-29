@@ -3,6 +3,8 @@ package model;
 import model.interfaces.Device;
 
 import java.util.ArrayList;
+import java.util.Collection;
+
 import static java.lang.Math.*;
 
 /**
@@ -63,6 +65,27 @@ public class ChildrenDevice {
         return device;
     }
 
+    boolean fl = false;
+    public void makeTree(String device_name) {
+        if (!fl){
+            fl = true;
+            for(DeviceandProbability device:devices){
+                device.makeTree(device_name);
+            }
+//            fl = false;
+        }
+
+        /*@Override
+        public void makeTree(double in, double out) {
+            if (!fl) {
+                fl = true;
+                System.out.println("<" + device_name + " in=" + String.format("%2.2f", in) + "out=" + String.format(", %2.2f", out) +">");
+                childrenDevice.makeTree();
+                System.out.println("</" + device_name + ">");
+                fl = false;
+            }
+        }*/
+    }
 
 
     private class DeviceandProbability{
@@ -78,6 +101,12 @@ public class ChildrenDevice {
             this.q = q;
         }
 
+        public void makeTree(String device_name) {
+            System.out.println("<" + device.getDeviseName() + " in=" + String.format("%2.2f", 0.0) + "out=" + String.format(", %2.2f", q) +">");
+            device.makeTree();
+            System.out.println("</" + device.getDeviseName() + ">");
+        }
     }
+
 }
 
