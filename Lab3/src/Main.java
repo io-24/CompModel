@@ -9,13 +9,11 @@ import statustable.StatusTable;
  */
 public class Main {
     public static void main(String[] args) {
-        Device CPU = new CP("CP", /*COUNT OF TASKS*/ 4,/*TIME OF PROCESSING*/ 1,/*COUNT OF PROCESSOR*/ 1);
+        Device CPU = new CP("CP", /*COUNT OF TASKS*/ 100,/*TIME OF PROCESSING*/ 1,/*COUNT OF PROCESSOR*/ 1);
 
-        Device north_bridge = new SimpleDevice("Norh bridge", 2.3);
+        Device north_bridge = new SimpleDevice("North bridge", 2.3/2);
 
         Device south_bridge = new SimpleDevice("South bridge", 7.5);
-
-        Device GPU = new SimpleDevice("GPU", 5);
 
         Device RAM = new SimpleDevice("RAM", 2.5);
 
@@ -27,63 +25,76 @@ public class Main {
 
         Device COM = new SimpleDevice("COM", 375);
 
-        CPU.addDevice(north_bridge, 0.3);
-        north_bridge.addDevice(CPU, 0.4);
+        Device USB = new SimpleDevice("USB", 375);
 
-        CPU.addDevice(CPU, 0.7);
+        CPU.addDevice(north_bridge, 0.4);
+        north_bridge.addDevice(CPU, 0.5);
+
+        CPU.addDevice(CPU, 0.6);
 
         RAM.addDevice(north_bridge, 1);
-        north_bridge.addDevice(RAM, 0.25);
+        north_bridge.addDevice(RAM, 0.4);
 
-        GPU.addDevice(north_bridge, 1);
-        north_bridge.addDevice(GPU, 0.1);
 
-        north_bridge.addDevice(south_bridge, 0.25);
-        south_bridge.addDevice(north_bridge, 0.58);
+        north_bridge.addDevice(south_bridge, 0.1);
+        south_bridge.addDevice(north_bridge, 0.495);
 
-        south_bridge.addDevice(video_Processor, 0.4);
-        video_Processor.addDevice(south_bridge, 1);
+        south_bridge.addDevice(video_Processor, 0.5);
+        video_Processor.addDevice(CPU, 1);
 
-        south_bridge.addDevice(ISA, 0.02);
+        south_bridge.addDevice(ISA, 0.005);
         ISA.addDevice(south_bridge, 0.7);
 
-        ISA.addDevice(LPT, 0.15);
-        LPT.addDevice(ISA, 1);
+        ISA.addDevice(LPT, 0.1);
+        LPT.addDevice(CPU, 1);
 
         COM.addDevice(ISA, 1);
-        ISA.addDevice(COM, 0.15);
+        ISA.addDevice(COM, 0.1);
 
+        USB.addDevice(CPU, 1);
+        ISA.addDevice(USB, 0.1);
 
 
 
         StatusTable table  = StatusTable.getStatusTable();
 
-        for (int i = 0; i < 20000; i++) {
+        for (int i = 0; i < 10000; i++) {
             table.next();
         }
 
-        System.out.println(CPU.toString());
 
-        System.out.println(north_bridge.toString());
+        System.out.print(CPU);
 
-        System.out.println(south_bridge.toString());
+        System.out.print(north_bridge);
 
-        System.out.println(GPU);
+        System.out.print(south_bridge);
 
-        System.out.println(RAM);
+        System.out.print(RAM);
 
-        System.out.println(video_Processor);
+        System.out.print(video_Processor);
 
-        System.out.println(ISA);
+        System.out.print(ISA);
 
-        System.out.println(LPT);
+        System.out.print(LPT);
 
-        System.out.println(COM);
+        System.out.print(COM);
 
+        System.out.print(USB);
 
-        System.out.println();
+        System.out.println("All tasks " + SimpleDevice.sum);
+        System.out.println(table.getCurrentTime());
 
-        CPU.makeTree();
+        /*System.out.println(CPU.getChildrenDevice().test());
+        System.out.println(RAM.getChildrenDevice().test());
+        System.out.println(south_bridge.getChildrenDevice().test());
+        System.out.println(north_bridge.getChildrenDevice().test());
+        System.out.println(video_Processor.getChildrenDevice().test());
+        System.out.println(ISA.getChildrenDevice().test());
+        System.out.println(COM.getChildrenDevice().test());
+        System.out.println(USB.getChildrenDevice().test());
+        System.out.println(LPT.getChildrenDevice().test());*/
+
+/*        CPU.makeTree();*/
 
 
 

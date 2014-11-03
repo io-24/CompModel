@@ -1,5 +1,6 @@
 package model.interfaces;
 
+import model.ChildrenDevice;
 import statustable.StatusTable;
 import java.util.Collection;
 
@@ -18,4 +19,5 @@ public interface Device {
     double getEfficiency(int number_processor);
     void makeTree();
 
+    ChildrenDevice getChildrenDevice();
 }

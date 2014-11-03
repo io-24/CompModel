@@ -118,6 +118,10 @@ public class SimpleDevice implements Device{
         }
     }
 
+    @Override
+    public ChildrenDevice getChildrenDevice() {
+        return childrenDevice;
+    }
 
 
     private boolean addProcessingTask(){
@@ -150,8 +154,14 @@ StringBuffer ans;
             ,device_name, count_processing_task, getEfficiency(0)));
         }
 
+
+
+        sum+=count_processing_task;
+
         return ans.toString();
     }
+
+    public static int sum = 0;
 
     private double next() {
         return -processing_time*log(random());
