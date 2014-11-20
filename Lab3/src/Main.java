@@ -9,9 +9,15 @@ import statustable.StatusTable;
  */
 public class Main {
     public static void main(String[] args) {
-        Device CPU = new CP("CP", /*COUNT OF TASKS*/ 100,/*TIME OF PROCESSING*/ 1,/*COUNT OF PROCESSOR*/ 1);
+        Device CPU = new CP("CP", /*COUNT OF TASKS*/ 8,/*TIME OF PROCESSING*/ 1,/*COUNT OF PROCESSOR*/ 3);
 
-        Device north_bridge = new SimpleDevice("North bridge", 2.3/2);
+        Device north_bridge = new SimpleDevice("North bridge", 2.3);
+
+        CPU.addDevice(north_bridge, 0.4);
+//        north_bridge.addDevice(CPU, 1);
+
+        CPU.addDevice(CPU, 0.6);
+
 
         Device south_bridge = new SimpleDevice("South bridge", 7.5);
 
@@ -27,10 +33,10 @@ public class Main {
 
         Device USB = new SimpleDevice("USB", 375);
 
-        CPU.addDevice(north_bridge, 0.4);
+
         north_bridge.addDevice(CPU, 0.5);
 
-        CPU.addDevice(CPU, 0.6);
+
 
         RAM.addDevice(north_bridge, 1);
         north_bridge.addDevice(RAM, 0.4);
@@ -94,7 +100,7 @@ public class Main {
         System.out.println(USB.getChildrenDevice().test());
         System.out.println(LPT.getChildrenDevice().test());*/
 
-/*        CPU.makeTree();*/
+        CPU.makeTree("", CPU.getProcessingParams());
 
 
 

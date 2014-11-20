@@ -1,0 +1,8 @@
+<device name = "CP" countProcessor="3" processingTime="1.0" task="1" pr_task="3" >
+    <device name = "North bridge" out="0.4" countProcessor="1" processingTime="2.3" task="0" pr_task="0" >
+        <device name = "CP" out="1.0" countProcessor="3" processingTime="1.0" task="1" pr_task="3" >
+        </device>
+    </device>
+    <device name = "CP" out="0.6" countProcessor="3" processingTime="1.0" task="1" pr_task="3" >
+    </device>
+</device>

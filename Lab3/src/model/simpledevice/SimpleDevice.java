@@ -3,13 +3,16 @@ package model.simpledevice;
 import model.ChildrenDevice;
 import model.interfaces.Device;
 import statustable.StatusTable;
-import static java.lang.Math.*;
+
+import java.util.Collection;
+
+import static java.lang.Math.log;
+import static java.lang.Math.random;
 
 /**
  * Created by byte on 23.10.14.
- *
  */
-public class SimpleDevice implements Device{
+public class SimpleDevice implements Device {
 
     private int tasks, count_processing_task, count_processor;
     private double[] active_time, processing;
@@ -22,11 +25,11 @@ public class SimpleDevice implements Device{
         this(device_name, 0, processing_time);
     }
 
-    protected SimpleDevice(String device_name, int tasks, double processing_time){
+    protected SimpleDevice(String device_name, int tasks, double processing_time) {
         this(device_name, tasks, processing_time, 1);
     }
 
-    protected SimpleDevice(String device_name, int tasks, double processing_time, int count_processor){
+    protected SimpleDevice(String device_name, int tasks, double processing_time, int count_processor) {
         this.device_name = device_name;
         this.tasks = tasks;
         this.count_processor = count_processor;
@@ -52,19 +55,20 @@ public class SimpleDevice implements Device{
 
     @Override
     public boolean deviceReady() {
-        for(double fl: processing){
+        for (double fl : processing) {
             if (fl < 0) return true;
         }
         return false;
     }
 
 
-    private int getReadyDeviceNumber(){
-        for (int i = 0; i < processing.length; i++){
+    private int getReadyDeviceNumber() {
+        for (int i = 0; i < processing.length; i++) {
             if (processing[i] < 0) return i;
         }
         return -1;
     }
+
 
 
     @Override
@@ -104,59 +108,79 @@ public class SimpleDevice implements Device{
 
 
     private boolean fl = false;
+
     @Override
-    public void makeTree() {
-        if (!fl) {
-            fl = true;
-            childrenDevice.makeTree(device_name);
-//            fl = false;
-            /*fl = true;
-            System.out.println("<" + device_name + ">");
-            childrenDevice.makeTree();
-            System.out.println("</" + device_name + ">");
-            fl = false;*/
+    public void makeTree(String tab, String... param) {
+        System.out.print(tab + "<device name = \"" + getDeviseName() + "\" ");
+        for (int i = 0; i < param.length; i++) {
+            System.out.print(param[i] + " ");
+        }
+        System.out.println(">");
+        if (!fl) childrenDevice.makeTree(tab + "\t");
+        System.out.println(tab + "</device>");
+        fl = true;
+    }
+
+    @Override
+    public Collection<DeviceAndProbability> getChildrenDevice() {
+        return childrenDevice.getAllDevices();
+    }
+
+    @Override
+    public String getProcessingParams() {
+        return "countProcessor=\""
+                + count_processor
+                + "\" processingTime=\""
+                + processing_time + "\" "
+                + "task=\"" +
+                tasks +"\" " +
+                "pr_task=\"" +
+                (getProcessorCount() - getReadyDeviceCount()) +"\"" ;
+
+    }
+
+    @Override
+    public void getAllDevices(Collection<Device> list) {
+        if (!list.contains(this)) {
+            list.add(this);
+            childrenDevice.getAllDevices(list);
         }
     }
 
-    @Override
-    public ChildrenDevice getChildrenDevice() {
-        return childrenDevice;
-    }
 
-
-    private boolean addProcessingTask(){
+    private boolean addProcessingTask() {
         if (!deviceReady() || tasks == 0) return false;
         int k;
-        while (tasks > 0 && (k = getReadyDeviceNumber()) >= 0){
+        while (tasks > 0 && (k = getReadyDeviceNumber()) >= 0) {
             double next = next();
             statusTable.addStatus(this, next, k);
-            tasks --;
+            tasks--;
             processing[k] = next;
         }
         return true;
     }
 
-    public String toString(){
-StringBuffer ans;
+    public String toString() {
+        StringBuffer ans;
         if (count_processor > 1) {
-        ans = new StringBuffer(String.format("Device name: %s\n" +
-                  "Count of processor: %d\n"
-                                            , device_name, count_processor));
-        for (int i = 0; i < count_processor; i++){
-            ans.append(String.format("      Processsor %d \n" +
-                                     "          Count of processing task: %d\n" +
-                                     "          Efficiency: %1.2f\n"
-                    ,i, count_processing_task, getEfficiency(i)));
-        }} else {
             ans = new StringBuffer(String.format("Device name: %s\n" +
-                            "          Count of processing task: %d\n" +
-                            "          Efficiency: %1.2f\n"
-            ,device_name, count_processing_task, getEfficiency(0)));
+                    "Count of processor: %d\n"
+                    , device_name, count_processor));
+            for (int i = 0; i < count_processor; i++) {
+                ans.append(String.format("      Processor %d \n" +
+                        "          Count of processing task: %d\n" +
+                        "          Efficiency: %1.2f\n"
+                        , i, count_processing_task, getEfficiency(i)));
+            }
+        } else {
+            ans = new StringBuffer(String.format("Device name: %s\n" +
+                    "          Count of processing task: %d\n" +
+                    "          Efficiency: %1.2f\n"
+                    , device_name, count_processing_task, getEfficiency(0)));
         }
 
 
-
-        sum+=count_processing_task;
+        sum += count_processing_task;
 
         return ans.toString();
     }
@@ -164,7 +188,48 @@ StringBuffer ans;
     public static int sum = 0;
 
     private double next() {
-        return -processing_time*log(random());
+        return -processing_time * log(random());
+    }
+
+
+    public String getParam(){
+        StringBuilder ans = new StringBuilder();
+
+        ans.append("Device name: ").append(device_name).append("\n");
+        ans.append("\t count processor: ").append(count_processor).append("\n");
+        ans.append("\t task: ").append(tasks).append("\n");
+        ans.append("\t ready processor: ").append(getReadyDeviceCount()).append("\n");
+        return ans.toString();
+    }
+
+    @Override
+    public int getTask() {
+        return tasks;
+    }
+
+    @Override
+    public int getProcessorCount() {
+        return count_processor;
+    }
+
+    public int getReadyDeviceCount() {
+        int ans = 0;
+        for (int i = 0; i < processing.length; i++) {
+            if (processing[i] < 0) ans++;
+        }
+        return ans;
+    }
+
+    @Override
+    public void clear() {
+        tasks = 0;
+        for (int i = 0; i < processing.length; i++) {
+            processing[i] = -1;
+            active_time[i] = 0;
+        }
+        processing_time = 0;
+
+
     }
 
 

@@ -1,0 +1,36 @@
+<device name = "CP" countProcessor="3" processingTime="1.0" task="0" pr_task="2" >
+    <device name = "North bridge" out="0.4" countProcessor="1" processingTime="2.3" task="1" pr_task="1" >
+        <device name = "CP" out="0.5" countProcessor="3" processingTime="1.0" task="0" pr_task="2" >
+        </device>
+        <device name = "RAM" out="0.4" countProcessor="1" processingTime="2.5" task="0" pr_task="0" >
+            <device name = "North bridge" out="1.0" countProcessor="1" processingTime="2.3" task="1" pr_task="1" >
+            </device>
+        </device>
+        <device name = "South bridge" out="0.1" countProcessor="1" processingTime="7.5" task="3" pr_task="1" >
+            <device name = "North bridge" out="0.495" countProcessor="1" processingTime="2.3" task="1" pr_task="1" >
+            </device>
+            <device name = "Video Processor" out="0.5" countProcessor="1" processingTime="7.5" task="0" pr_task="0" >
+                <device name = "CP" out="1.0" countProcessor="3" processingTime="1.0" task="0" pr_task="2" >
+                </device>
+            </device>
+            <device name = "ISA" out="0.005" countProcessor="1" processingTime="375.0" task="0" pr_task="0" >
+                <device name = "South bridge" out="0.7" countProcessor="1" processingTime="7.5" task="3" pr_task="1" >
+                </device>
+                <device name = "LPT" out="0.1" countProcessor="1" processingTime="375.0" task="0" pr_task="0" >
+                    <device name = "CP" out="1.0" countProcessor="3" processingTime="1.0" task="0" pr_task="2" >
+                    </device>
+                </device>
+                <device name = "COM" out="0.1" countProcessor="1" processingTime="375.0" task="0" pr_task="0" >
+                    <device name = "ISA" out="1.0" countProcessor="1" processingTime="375.0" task="0" pr_task="0" >
+                    </device>
+                </device>
+                <device name = "USB" out="0.1" countProcessor="1" processingTime="375.0" task="0" pr_task="0" >
+                    <device name = "CP" out="1.0" countProcessor="3" processingTime="1.0" task="0" pr_task="2" >
+                    </device>
+                </device>
+            </device>
+        </device>
+    </device>
+    <device name = "CP" out="0.6" countProcessor="3" processingTime="1.0" task="0" pr_task="2" >
+    </device>
+</device>
