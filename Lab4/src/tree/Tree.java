@@ -26,7 +26,7 @@ public class Tree {
         stack = new LinkedList<Status>();
         stack.add(Status.getCurrentStatus());
         currentId = 0;
-        while (stack.size() < currentId){
+        while (stack.size() > currentId){
             makeTree();
         }
 
@@ -36,7 +36,7 @@ public class Tree {
 
     public static void main(String[] args) {
         try {
-            Tree tree = new Tree("init.xml");
+            Tree tree = new Tree("simple.xml");
             Status.showTable();
             Status.showGraph();
         } catch (IOException e) {
@@ -49,11 +49,14 @@ public class Tree {
         for (Point point : points) {
             int id = getCurrentStatusId();
             if (!point.sendTask()) continue;
-            if (addStatus(getID(point.gethDevice()), getID(point.getchDevice()), point.getQmultLyamda(), id))
-                makeTree();
+            if (addStatus(getID(point.gethDevice()), getID(point.getchDevice()), point.getQmultLyamda(), id)){
+                Status status = Status.getCurrentStatus();
+                if (!stack.contains(status)) stack.add(status);
+            }
             point.taskBack();
         }
     }
+
 
 
 }

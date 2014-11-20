@@ -35,11 +35,9 @@ public class Status {
     public static boolean addStatus() {
         Status status = new Status();
         if (statusList.contains(status)) {
-            buf = statusList.indexOf(status);
             return false;
         }
         statusList.add(status);
-        buf = statusList.indexOf(status);
         return true;
     }
 
@@ -61,8 +59,17 @@ public class Status {
     }
 
     public static int getCurrentStatusId() {
+        return getStatusId();
+    }
+
+    private static int getStatusId(){
         Status status = new Status();
-        return statusList.indexOf(status);
+        int id = statusList.indexOf(status);
+        if (id == -1) {
+            statusList.add(status);
+            id = statusList.indexOf(status);
+        }
+        return id;
     }
 
     public String toString(){
