@@ -9,7 +9,28 @@ import statustable.StatusTable;
  */
 public class Main {
     public static void main(String[] args) {
-        Device CPU = new CP("CP", /*COUNT OF TASKS*/ 8,/*TIME OF PROCESSING*/ 1,/*COUNT OF PROCESSOR*/ 3);
+
+/*CP
+	 pr:1 0.277542536751192
+	 pr:2 0.1448037101733879
+	 pr:3 0.08307535939598676
+North bridge
+	 pr:1 0.84496124954276
+RAM
+	 pr:1 0.367374456323732
+South bridge
+	 pr:1 0.27660653431973964
+Video Processor
+	 pr:1 0.1383032671616407
+ISA
+	 pr:1 0.07683514842310357
+LPT
+	 pr:1 0.007683514839559015
+COM
+	 pr:1 0.007683514839559015
+USB
+	 pr:1 0.007683514839559014 */
+        Device CPU = new CP("CP", /*COUNT OF TASKS*/ 4,/*TIME OF PROCESSING*/ 1,/*COUNT OF PROCESSOR*/ 3);
 
         Device north_bridge = new SimpleDevice("North bridge", 2.3);
 
@@ -64,7 +85,7 @@ public class Main {
 
         StatusTable table  = StatusTable.getStatusTable();
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             table.next();
         }
 

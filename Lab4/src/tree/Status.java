@@ -62,7 +62,7 @@ public class Status {
         return getStatusId();
     }
 
-    private static int getStatusId(){
+    private static int getStatusId() {
         Status status = new Status();
         int id = statusList.indexOf(status);
         if (id == -1) {
@@ -72,7 +72,7 @@ public class Status {
         return id;
     }
 
-    public String toString(){
+    public String toString() {
         StringBuilder ans = new StringBuilder("<");
         for (int i = 0; i < task.length; i++) {
             ans.append("<").
@@ -91,14 +91,14 @@ public class Status {
             head.append(String.format("%9s ", Status.statusList.get(0).name[i]));
         }
         System.out.println(head);
-        for (Status status:statusList){
+        for (Status status : statusList) {
             System.out.println(status);
         }
     }
 
     public static void showGraph() {
         Collections.sort(map);
-        for (MyMap myMap: map){
+        for (MyMap myMap : map) {
             System.out.println(myMap);
         }
     }
@@ -113,9 +113,34 @@ public class Status {
             device.setProperties(status.pr_count[i], status.pr_task[i]);
         }
     }
+
+    public static double[][] getMatrix() {
+        double[][] ans = new double[statusList.size()][statusList.size()];
+        for (int i = 0; i < map.size(); i++) {
+            MyMap buf = map.get(i);
+            ans[buf.getHStatusId()][buf.getHStatusId()] -= buf.getQ();
+            ans[buf.getChStatusId()][buf.getHStatusId()] += buf.getQ();
+        }
+
+        for (int i = 0; i < ans.length; i++) {
+            ans[0][i] = 1;
+        }
+        return ans;
+    }
+
+    public static double[][] getInten(double[] p) {
+        double[][] ans = new double[IDevice.getAllDeviseSize()][4];
+        for (int i = 0; i < statusList.size(); i++) {
+            Status buf = statusList.get(i);
+            for (int j = 0; j < buf.pr_task.length; j++) {
+                ans[j][buf.pr_task[j]] +=p[i];
+            }
+        }
+        return ans;
+    }
 }
 
-class MyMap implements Comparable<MyMap>{
+class MyMap implements Comparable<MyMap> {
     private int hDevice;
     private int chDevice;
     private double q;
@@ -132,8 +157,8 @@ class MyMap implements Comparable<MyMap>{
 
     @Override
     public String toString() {
-        return hDevice + " -> " + chDevice + " : " + String.format("%2.3f",q) + "; "+
-                hStatus +" -> " + chStatus+";";
+        return hDevice + " -> " + chDevice + " : " + String.format("%2.3f", q) + "; " +
+                hStatus + " -> " + chStatus + ";";
     }
 
     @Override
@@ -143,5 +168,17 @@ class MyMap implements Comparable<MyMap>{
         if (chDevice < o.chDevice) return -1;
         if (chDevice > o.chDevice) return 1;
         return 0;
+    }
+
+    public int getHStatusId() {
+        return hStatus;
+    }
+
+    public int getChStatusId() {
+        return chStatus;
+    }
+
+    public double getQ() {
+        return q;
     }
 }
